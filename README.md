@@ -1,43 +1,50 @@
 # Raycast Extensions
 
-A collection of custom Raycast extensions for daily productivity.
+> [English](./README_EN.md)
 
-| Extension | Type | Description |
-|-----------|------|-------------|
-| [Slack Channel Opener](./slack-channel-opener) | Extension | Search and open Slack channels by name |
-| [GitHub Repo Opener](./github-repo-opener) | Extension | Search and open GitHub repos with sub-page shortcuts |
-| [Snowflake ID Generator](./snowflake-id-generator) | Script Command | Generate Snowflake IDs (Crockford Base32) |
+일상 생산성을 위한 커스텀 Raycast 확장 모음입니다.
 
-## Quick Start
+![Overview](./docs/overview.png)
+
+| 확장 | 타입 | 설명 |
+|------|------|------|
+| [Slack Channel Opener](./slack-channel-opener) | Extension | Slack 채널을 이름으로 검색하고 바로 열기 |
+| [GitHub Repo Opener](./github-repo-opener) | Extension | GitHub 레포를 검색하고 Code/PR/Actions 등 바로 열기 |
+| [Snowflake ID Generator](./snowflake-id-generator) | Script Command | Snowflake ID 생성 (Crockford Base32) |
+
+## 빠른 시작
 
 ### Extensions (Slack / GitHub)
 
 ```bash
-cd slack-channel-opener  # or github-repo-opener
+cd slack-channel-opener  # 또는 github-repo-opener
 npm install
 npm run dev
 ```
 
-Raycast will auto-detect the extension. Enter your API token on first launch.
+Raycast가 자동으로 확장을 인식합니다. 첫 실행 시 API 토큰을 입력하세요.
 
 ### Script Command (Snowflake)
 
-1. Open Raycast Settings > Extensions > Script Commands
-2. Add the `snowflake-id-generator` directory
-3. Done — search "Generate Snowflake IDs" in Raycast
+1. Raycast 설정 > Extensions > Script Commands 열기
+2. `snowflake-id-generator` 디렉토리 추가
+3. Raycast에서 "Generate Snowflake IDs" 검색
 
-## Token Setup
+## 토큰 발급
 
 ### Slack User Token
 
-1. Go to https://api.slack.com/apps > Create New App > From scratch
-2. OAuth & Permissions > **User Token Scopes** > Add `channels:read`, `groups:read`
-3. Install to Workspace > Copy **User OAuth Token** (`xoxp-...`)
+1. https://api.slack.com/apps > **Create New App** > From scratch
+2. OAuth & Permissions > **User Token Scopes** > `channels:read`, `groups:read` 추가
+3. Install to Workspace > **User OAuth Token** (`xoxp-...`) 복사
+
+> **주의**: Bot Token Scopes가 아닌 **User Token Scopes**에 추가해야 합니다. Bot 토큰은 봇이 참여한 채널만 조회 가능합니다.
 
 ### GitHub Token
 
 ```bash
+# gh CLI가 설치되어 있다면:
 gh auth token
 ```
 
-Or create a Personal Access Token at GitHub Settings > Developer settings > Tokens.
+또는 GitHub Settings > Developer settings > Personal access tokens에서 발급하세요.

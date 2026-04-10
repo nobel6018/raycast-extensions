@@ -1,30 +1,36 @@
 # GitHub Repo Opener
 
-Search and open GitHub repositories in the browser with sub-page shortcuts.
+> [English](./README_EN.md)
 
-![GitHub Repo Opener](../docs/github-mockup.png)
+Raycast에서 GitHub 레포지토리를 검색하고 브라우저에서 바로 여는 확장입니다.
 
-## Features
+## 스크린샷
 
-- All repos you have access to (owned, collaborator, organization)
-- **Favorites** — pin frequently used repos to the top (`Cmd+F`)
-- Sections: Favorites > My Repos > Organizations & Contributed
-- Language tags with color coding
-- Direct shortcuts to Code, PRs, Actions, Issues, Branches, Releases, Settings
-- 30-day cache with manual refresh (`Cmd+R`)
+| 레포 목록 | 액션 패널 |
+|-----------|-----------|
+| ![List](../docs/github-list.png) | ![Actions](../docs/github-actions.png) |
 
-## Setup
+## 기능
 
-### 1. Get GitHub Token
+- 접근 가능한 모든 레포 조회 (소유, 협업, 조직)
+- **즐겨찾기** — 자주 쓰는 레포를 상단에 고정 (`Cmd+F`)
+- 섹션 구분: Favorites > My Repos > Organizations & Contributed
+- 언어별 컬러 태그
+- Code, PRs, Actions, Issues, Branches, Releases, Settings 바로가기
+- 30일 캐시 + 수동 새로고침 (`Cmd+R`)
+
+## 설치
+
+### 1. GitHub 토큰 발급
 
 ```bash
-# If you have gh CLI installed:
+# gh CLI가 설치되어 있다면:
 gh auth token
 ```
 
-Or create a Personal Access Token at **GitHub Settings > Developer settings > Personal access tokens**.
+또는 **GitHub Settings > Developer settings > Personal access tokens**에서 발급하세요.
 
-### 2. Install Extension
+### 2. 확장 설치
 
 ```bash
 cd github-repo-opener
@@ -32,21 +38,21 @@ npm install
 npm run dev
 ```
 
-### 3. Configure Token
+### 3. 토큰 설정
 
-On first launch, Raycast will prompt for the GitHub token. Paste your `ghp_...` or `gho_...` token.
+첫 실행 시 Raycast가 토큰 입력을 요청합니다. `ghp_...` 또는 `gho_...` 토큰을 붙여넣으세요.
 
-## Keyboard Shortcuts
+## 단축키
 
-| Shortcut | Action |
-|----------|--------|
-| `Enter` | Open repo (Code) |
-| `Cmd+O` | Open repo (Code) |
+| 단축키 | 동작 |
+|--------|------|
+| `Enter` | 레포 열기 (Code) |
+| `Cmd+O` | 레포 열기 (Code) |
 | `Cmd+Shift+P` | Pull Requests |
 | `Cmd+Shift+A` | Actions |
 | `Cmd+I` | Issues |
 | `Cmd+B` | Branches |
 | `Cmd+L` | Releases |
 | `Cmd+Shift+,` | Settings |
-| `Cmd+F` | Toggle favorite |
-| `Cmd+R` | Refresh repo list |
+| `Cmd+F` | 즐겨찾기 토글 |
+| `Cmd+R` | 레포 목록 새로고침 |
