@@ -1,4 +1,14 @@
-import { ActionPanel, Action, List, getPreferenceValues, showToast, Toast, Icon, Cache, Color } from "@raycast/api";
+import {
+  ActionPanel,
+  Action,
+  List,
+  getPreferenceValues,
+  showToast,
+  Toast,
+  Icon,
+  Cache,
+  Color,
+} from "@raycast/api";
 import { useEffect, useState, useMemo, useCallback } from "react";
 
 interface Repo {
@@ -28,20 +38,21 @@ const CACHE_KEY = "github-repos";
 const FAVORITES_KEY = "github-favorites";
 const CACHE_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
 
-function loadFavorites(): Set<string> {
+function loadFavorites(): string[] {
   const raw = cache.get(FAVORITES_KEY);
   if (!raw) {
-    return new Set();
+    return [];
   }
   try {
-    return new Set(JSON.parse(raw));
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    return new Set();
+    return [];
   }
 }
 
-function saveFavorites(favs: Set<string>) {
-  cache.set(FAVORITES_KEY, JSON.stringify([...favs]));
+function saveFavorites(favs: string[]) {
+  cache.set(FAVORITES_KEY, JSON.stringify(favs));
 }
 
 async function fetchAllRepos(token: string): Promise<Repo[]> {
@@ -95,7 +106,7 @@ export default function Command() {
   const { githubToken } = getPreferenceValues<Preferences>();
   const [repos, setRepos] = useState<Repo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [favorites, setFavorites] = useState<Set<string>>(loadFavorites);
+  const [favorites, setFavorites] = useState<string[]>(loadFavorites);
 
   async function loadRepos(skipCache = false) {
     setIsLoading(true);
@@ -119,7 +130,10 @@ export default function Command() {
     try {
       const allRepos = await fetchAllRepos(githubToken);
       setRepos(allRepos);
-      cache.set(CACHE_KEY, JSON.stringify({ repos: allRepos, timestamp: Date.now() }));
+      cache.set(
+        CACHE_KEY,
+        JSON.stringify({ repos: allRepos, timestamp: Date.now() }),
+      );
     } catch (error) {
       await showToast({
         style: Toast.Style.Failure,
@@ -137,24 +151,39 @@ export default function Command() {
 
   const toggleFavorite = useCallback((fullName: string) => {
     setFavorites((prev) => {
-      const next = new Set(prev);
-      if (next.has(fullName)) {
-        next.delete(fullName);
-      } else {
-        next.add(fullName);
+      const next = prev.includes(fullName)
+        ? prev.filter((f) => f !== fullName)
+        : [...prev, fullName];
+      saveFavorites(next);
+      return next;
+    });
+  }, []);
+
+  const moveFavorite = useCallback((fullName: string, direction: -1 | 1) => {
+    setFavorites((prev) => {
+      const idx = prev.indexOf(fullName);
+      const target = idx + direction;
+      if (idx === -1 || target < 0 || target >= prev.length) {
+        return prev;
       }
+      const next = [...prev];
+      [next[idx], next[target]] = [next[target], next[idx]];
       saveFavorites(next);
       return next;
     });
   }, []);
 
   const { favs, owned, contributed } = useMemo(() => {
-    const favs: Repo[] = [];
+    const repoMap = new Map(repos.map((r) => [r.full_name, r]));
+    const favSet = new Set(favorites);
+    const favs: Repo[] = favorites
+      .map((fn) => repoMap.get(fn))
+      .filter((r): r is Repo => r !== undefined);
     const owned: Repo[] = [];
     const contributed: Repo[] = [];
     for (const repo of repos) {
-      if (favorites.has(repo.full_name)) {
-        favs.push(repo);
+      if (favSet.has(repo.full_name)) {
+        continue;
       } else if (repo.owner.login === repos[0]?.owner.login && !repo.fork) {
         owned.push(repo);
       } else {
@@ -166,7 +195,8 @@ export default function Command() {
 
   function repoActions(repo: Repo) {
     const base = repo.html_url;
-    const isFav = favorites.has(repo.full_name);
+    const isFav = favorites.includes(repo.full_name);
+    const favIndex = favorites.indexOf(repo.full_name);
     return (
       <ActionPanel>
         <Action.OpenInBrowser
@@ -217,6 +247,22 @@ export default function Command() {
           shortcut={{ modifiers: ["cmd"], key: "f" }}
           onAction={() => toggleFavorite(repo.full_name)}
         />
+        {isFav && favIndex > 0 && (
+          <Action
+            title="Move up in Favorites"
+            icon={Icon.ArrowUp}
+            shortcut={{ modifiers: ["cmd", "opt"], key: "arrowUp" }}
+            onAction={() => moveFavorite(repo.full_name, -1)}
+          />
+        )}
+        {isFav && favIndex >= 0 && favIndex < favorites.length - 1 && (
+          <Action
+            title="Move down in Favorites"
+            icon={Icon.ArrowDown}
+            shortcut={{ modifiers: ["cmd", "opt"], key: "arrowDown" }}
+            onAction={() => moveFavorite(repo.full_name, 1)}
+          />
+        )}
         <Action
           title="Refresh Repos"
           icon={Icon.ArrowClockwise}
@@ -228,17 +274,29 @@ export default function Command() {
   }
 
   function repoItem(repo: Repo) {
-    const isFav = favorites.has(repo.full_name);
-    const langColor = repo.language ? LANGUAGE_COLORS[repo.language] || Color.SecondaryText : undefined;
+    const isFav = favorites.includes(repo.full_name);
+    const langColor = repo.language
+      ? LANGUAGE_COLORS[repo.language] || Color.SecondaryText
+      : undefined;
     return (
       <List.Item
         key={repo.full_name}
-        icon={isFav ? { source: Icon.Star, tintColor: Color.Yellow } : repo.private ? Icon.Lock : Icon.Globe}
+        icon={
+          isFav
+            ? { source: Icon.Star, tintColor: Color.Yellow }
+            : repo.private
+              ? Icon.Lock
+              : Icon.Globe
+        }
         title={repo.full_name}
         subtitle={repo.description || ""}
         accessories={[
-          ...(repo.language ? [{ tag: { value: repo.language, color: langColor } }] : []),
-          ...(repo.stargazers_count > 0 ? [{ text: `${repo.stargazers_count}`, icon: Icon.Star }] : []),
+          ...(repo.language
+            ? [{ tag: { value: repo.language, color: langColor } }]
+            : []),
+          ...(repo.stargazers_count > 0
+            ? [{ text: `${repo.stargazers_count}`, icon: Icon.Star }]
+            : []),
         ]}
         actions={repoActions(repo)}
       />
@@ -258,7 +316,10 @@ export default function Command() {
         </List.Section>
       )}
       {contributed.length > 0 && (
-        <List.Section title="Organizations & Contributed" subtitle={`${contributed.length}`}>
+        <List.Section
+          title="Organizations & Contributed"
+          subtitle={`${contributed.length}`}
+        >
           {contributed.map(repoItem)}
         </List.Section>
       )}
