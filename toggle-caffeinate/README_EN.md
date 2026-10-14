@@ -13,9 +13,13 @@ Toggles `caffeinate -i` so the system stays awake while the display sleeps norma
 
 ## Installation
 
-1. Open **Raycast Settings** > **Extensions** > **Script Commands**
-2. Select the `toggle-caffeinate` folder in **Add Directories**
-3. Search "Toggle Caffeinate" in Raycast
+Run this from the repo root to register it in Raycast automatically.
+
+```bash
+./install.sh toggle-caffeinate
+```
+
+Then search "Toggle Caffeinate" in Raycast.
 
 ## How it works
 
@@ -24,4 +28,4 @@ Toggles `caffeinate -i` so the system stays awake while the display sleeps norma
 | OFF | Starts `caffeinate -i` in the background, shows "Caffeinate ON" |
 | ON | Kills the running process, shows "Caffeinate OFF" |
 
-To keep the display on as well, change `-i` to `-di` in the script.
+To keep the display on as well, change `-i` to `-di` in `src/toggle.ts`.

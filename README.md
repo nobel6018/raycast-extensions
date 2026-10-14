@@ -10,26 +10,19 @@
 |------|------|------|
 | [Slack Channel Opener](./slack-channel-opener) | Extension | Slack 채널을 이름으로 검색하고 바로 열기 |
 | [GitHub Repo Opener](./github-repo-opener) | Extension | GitHub 레포를 검색하고 Code/PR/Actions 등 바로 열기 |
-| [Snowflake ID Generator](./snowflake-id-generator) | Script Command | Snowflake ID 생성 (Crockford Base32) |
-| [Toggle Caffeinate](./toggle-caffeinate) | Script Command | 시스템 슬립 방지 토글 (화면은 꺼짐) |
+| [Snowflake ID Generator](./snowflake-id-generator) | Extension | Snowflake ID 생성 (Crockford Base32) |
+| [Toggle Caffeinate](./toggle-caffeinate) | Extension | 시스템 슬립 방지 토글 (화면은 꺼짐) |
 
 ## 빠른 시작
 
-### Extensions (Slack / GitHub)
+모든 항목이 Raycast 확장이라 Script Directory를 손으로 추가할 필요가 없습니다.
 
 ```bash
-cd slack-channel-opener  # 또는 github-repo-opener
-npm install
-npm run dev
+./install.sh                         # 전부 등록
+./install.sh snowflake-id-generator  # 일부만 등록
 ```
 
-Raycast가 자동으로 확장을 인식합니다. 첫 실행 시 API 토큰을 입력하세요.
-
-### Script Commands (Snowflake / Caffeinate)
-
-1. Raycast 설정 > Extensions > Script Commands 열기
-2. `snowflake-id-generator` 또는 `toggle-caffeinate` 디렉토리 추가
-3. Raycast에서 "Generate Snowflake IDs" 또는 "Toggle Caffeinate" 검색
+Slack, GitHub 확장은 첫 실행 시 API 토큰을 입력하세요.
 
 ## 토큰 발급
 

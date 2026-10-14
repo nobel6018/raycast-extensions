@@ -13,9 +13,13 @@
 
 ## 설치
 
-1. **Raycast 설정** > **Extensions** > **Script Commands** 열기
-2. **Add Directories**에서 `toggle-caffeinate` 폴더 선택
-3. Raycast에서 "Toggle Caffeinate" 검색
+레포 루트에서 아래 명령을 실행하면 Raycast에 자동 등록됩니다.
+
+```bash
+./install.sh toggle-caffeinate
+```
+
+등록 후 Raycast에서 "Toggle Caffeinate"를 검색하세요.
 
 ## 동작 방식
 
@@ -24,4 +28,4 @@
 | OFF | `caffeinate -i` 백그라운드 시작, "Caffeinate ON" 표시 |
 | ON | 실행 중인 프로세스 종료, "Caffeinate OFF" 표시 |
 
-디스플레이까지 켜두고 싶다면 스크립트의 `-i`를 `-di`로 바꾸세요.
+디스플레이까지 켜두고 싶다면 `src/toggle.ts`의 `-i`를 `-di`로 바꾸세요.

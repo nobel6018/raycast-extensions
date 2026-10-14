@@ -10,26 +10,19 @@ A collection of custom Raycast extensions for daily productivity.
 |-----------|------|-------------|
 | [Slack Channel Opener](./slack-channel-opener) | Extension | Search and open Slack channels by name |
 | [GitHub Repo Opener](./github-repo-opener) | Extension | Search and open GitHub repos with sub-page shortcuts |
-| [Snowflake ID Generator](./snowflake-id-generator) | Script Command | Generate Snowflake IDs (Crockford Base32) |
-| [Toggle Caffeinate](./toggle-caffeinate) | Script Command | Toggle system-sleep prevention (display still sleeps) |
+| [Snowflake ID Generator](./snowflake-id-generator) | Extension | Generate Snowflake IDs (Crockford Base32) |
+| [Toggle Caffeinate](./toggle-caffeinate) | Extension | Toggle system-sleep prevention (display still sleeps) |
 
 ## Quick Start
 
-### Extensions (Slack / GitHub)
+Every item is a Raycast extension, so there is no Script Directory to add by hand.
 
 ```bash
-cd slack-channel-opener  # or github-repo-opener
-npm install
-npm run dev
+./install.sh                         # register everything
+./install.sh snowflake-id-generator  # register only some
 ```
 
-Raycast will auto-detect the extension. Enter your API token on first launch.
-
-### Script Commands (Snowflake / Caffeinate)
-
-1. Open Raycast Settings > Extensions > Script Commands
-2. Add the `snowflake-id-generator` or `toggle-caffeinate` directory
-3. Search "Generate Snowflake IDs" or "Toggle Caffeinate" in Raycast
+The Slack and GitHub extensions ask for an API token on first launch.
 
 ## Token Setup
 

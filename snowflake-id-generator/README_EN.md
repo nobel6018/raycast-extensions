@@ -8,15 +8,19 @@ Generate unique Snowflake IDs encoded in Crockford Base32, copied to clipboard.
 
 - Twitter Snowflake algorithm (epoch: 2010-11-04)
 - Crockford Base32 encoding (URL-safe, human-readable)
-- Generates N IDs at once (default: 5, max: 1000)
-- Machine ID derived from hardware + PID
+- Generates N IDs at once (default: 1, max: 1000)
+- Machine ID derived from hostname + PID
 - Monotonically increasing within the same millisecond
 
 ## Setup
 
-1. Open **Raycast Settings** > **Extensions** > **Script Commands**
-2. Click **Add Directories** and select the `snowflake-id-generator` folder
-3. Search "Generate Snowflake IDs" in Raycast
+Run this from the repo root to register it in Raycast automatically.
+
+```bash
+./install.sh snowflake-id-generator
+```
+
+Then search "Generate Snowflake IDs" in Raycast.
 
 ## Usage
 
@@ -33,5 +37,5 @@ Generate unique Snowflake IDs encoded in Crockford Base32, copied to clipboard.
 ```
 
 - **Timestamp**: milliseconds since epoch (2010-11-04T01:42:54.657Z)
-- **Machine ID**: MD5 hash of MAC address + PID, masked to 10 bits
+- **Machine ID**: MD5 hash of hostname + PID, masked to 10 bits
 - **Sequence**: per-millisecond counter (0-4095)
