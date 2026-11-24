@@ -4,7 +4,7 @@
   "title": "Toggle Caffeinate",
   "description": "Toggle system-sleep prevention with caffeinate -i (display still sleeps)",
   "icon": "extension-icon.png",
-  "author": "levit",
+  "author": "leedo",
   "categories": ["System"],
   "license": "MIT",
   "commands": [

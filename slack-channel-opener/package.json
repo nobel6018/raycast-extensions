@@ -4,7 +4,7 @@
   "title": "Open Slack Channel",
   "description": "Search and open Slack channels by name",
   "icon": "extension-icon.png",
-  "author": "levit",
+  "author": "leedo",
   "categories": ["Communication"],
   "license": "MIT",
   "commands": [
